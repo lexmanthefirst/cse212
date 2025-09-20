@@ -22,7 +22,32 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var result = new List<string>();
+        var wordSet = new HashSet<string>(words);
+
+        foreach (var word in words)
+        {
+            // Ignore same letter words like 'aa'
+            if (word[0] != word[1])
+            {
+                var reversedWord = new string(new char[] { word[1], word[0] });
+                if (wordSet.Contains(reversedWord))
+                {
+                    // To avoid duplicates like "am & ma" and "ma & am", always add in a consistent order
+                    var pair = string.Compare(word, reversedWord) < 0 ? $"{word} & {reversedWord}" : $"{reversedWord} & {word}";
+                    if (!result.Contains(pair))
+                    {
+                        result.Add(pair);
+                    }
+                }
+                else
+                {
+                    //Add the word to the set for later checks
+                    wordSet.Add(word);
+                }
+            }
+        }
+        return result.ToArray();
     }
 
     /// <summary>
@@ -43,6 +68,19 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            // The degree is in the 4th column (index 3)
+            var degree = fields[3].Trim();
+            // Check if the degree is already in the dictionary
+            if (degrees.ContainsKey(degree))
+            {
+                // Increment the count for this degree
+                degrees[degree] += 1;
+            }
+            else
+            {
+                // First time seeing this degree, initialize count to 1
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -67,7 +105,50 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+
+        //Normalize words by removing spacing and converting to lowercase
+        word1 = word1.Replace(" ", "").ToLower();
+        word2 = word2.Replace(" ", "").ToLower();
+        // If word lengths differ, they cannot be anagrams
+        if (word1.Length != word2.Length)
+        {
+            return false;
+        }
+        // Count occurrences of each character in word1
+        var charCount = new Dictionary<char, int>();
+        foreach (var c in word1)
+        {
+            // If the character is already in the dictionary, increment its count
+            if (charCount.ContainsKey(c))
+            {
+                charCount[c]++;
+            }
+            else
+            {
+                charCount[c] = 1;
+            }
+        }
+
+        foreach (var c in word2)
+        {
+            // If the character is in the dictionary, decrement its count
+            if (charCount.ContainsKey(c))
+            {
+                charCount[c]--;
+                // If count goes to zero, remove the character from the dictionary
+                if (charCount[c] == 0)
+                {
+                    charCount.Remove(c);
+                }
+            }
+            else
+            {
+                // Character in word2 not found in word1, not an anagram
+                return false;
+            }
+        }
+
+        return charCount.Count == 0;
     }
 
     /// <summary>
