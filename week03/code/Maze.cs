@@ -32,7 +32,16 @@ public class Maze
     /// </summary>
     public void MoveLeft()
     {
-        // FILL IN CODE
+        // Check if we can move left
+        if (_mazeMap[(_currX, _currY)][0]) // Check if left move is allowed
+        {
+            _currX--; // Update x-coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
     }
 
     /// <summary>
@@ -42,6 +51,15 @@ public class Maze
     public void MoveRight()
     {
         // FILL IN CODE
+        if (_mazeMap[(_currX, _currY)][1]) // Check if right move is allowed
+        {
+            _currX++; // Update x-coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+       
     }
 
     /// <summary>
@@ -51,6 +69,14 @@ public class Maze
     public void MoveUp()
     {
         // FILL IN CODE
+        if (_mazeMap[(_currX, _currY)][2]) // Check if up move is allowed
+        {
+            _currY--; // Update y-coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -60,6 +86,14 @@ public class Maze
     public void MoveDown()
     {
         // FILL IN CODE
+        if (_mazeMap[(_currX, _currY)][3]) // Check if down move is allowed
+        {
+            _currY++; // Update y-coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     public string GetStatus()
